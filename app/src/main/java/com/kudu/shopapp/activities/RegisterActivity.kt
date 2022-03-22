@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.kudu.shopapp.R
 import com.kudu.shopapp.databinding.ActivityRegisterBinding
+import com.kudu.shopapp.firestore.Firestore
+import com.kudu.shopapp.model.User
 
 class RegisterActivity : BaseActivity() {
 
@@ -116,29 +119,39 @@ class RegisterActivity : BaseActivity() {
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
 
-                    hideProgressDialog()
-
                     //if registration is successful
                     if (task.isSuccessful) {
 
                         //firebase registered user
                         val firebaseUser: FirebaseUser = task.result!!.user!!
 
-                        showErrorSnackBar(
-                            "You are registered successfully. Your user id is ${firebaseUser.uid}",
-                            false
+                        val user = User(
+                            firebaseUser.uid,
+                            binding.etFirstName.text.toString().trim { it <= ' ' },
+                            binding.etLastName.text.toString().trim { it <= ' ' },
+                            binding.etEmail.text.toString().trim { it <= ' ' }
                         )
 
+                        Firestore().registerUser(this@RegisterActivity, user)
+
                         //signs out the user and redirects to Login Activity
-                        FirebaseAuth.getInstance().signOut()
-                        finish()
+                      /*  FirebaseAuth.getInstance().signOut()
+                        finish()*/
 
                     } else {
+                        hideProgressDialog()
                         //if registration failed, show error message
                         showErrorSnackBar(task.exception!!.message.toString(), true)
                     }
                 }
         }
+    }
+
+    fun userRegistrationSuccess() {
+        hideProgressDialog()
+
+        Toast.makeText(this, resources.getString(R.string.register_success), Toast.LENGTH_SHORT)
+            .show()
     }
 
 
