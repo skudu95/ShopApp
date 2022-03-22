@@ -1,6 +1,5 @@
 package com.kudu.shopapp.activities
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -34,7 +33,8 @@ class RegisterActivity : BaseActivity() {
         setUpActionBar()
 
         binding.tvLogin.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
+//            startActivity(Intent(this, LoginActivity::class.java))
+            onBackPressed()
         }
 
         binding.btnRegister.setOnClickListener {
@@ -107,12 +107,16 @@ class RegisterActivity : BaseActivity() {
         //checking validations
         if (validateRegisterDetails()) {
 
+            showProgressDialog(resources.getString(R.string.please_wait))
+
             val email: String = binding.etEmail.text.toString().trim { it <= ' ' }
             val password: String = binding.etPassword.text.toString().trim { it <= ' ' }
 
             //creating an instance and registering an user with email and password
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
+
+                    hideProgressDialog()
 
                     //if registration is successful
                     if (task.isSuccessful) {
@@ -124,6 +128,11 @@ class RegisterActivity : BaseActivity() {
                             "You are registered successfully. Your user id is ${firebaseUser.uid}",
                             false
                         )
+
+                        //signs out the user and redirects to Login Activity
+                        FirebaseAuth.getInstance().signOut()
+                        finish()
+
                     } else {
                         //if registration failed, show error message
                         showErrorSnackBar(task.exception!!.message.toString(), true)

@@ -4,12 +4,16 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1875" />
+        <entry key="app/src/main/res/drawable/back_icon.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/button_background.xml" value="0.202" />
+        <entry key="app/src/main/res/drawable/toolbar_background.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_base.xml" value="0.1887031408308004" />
+        <entry key="app/src/main/res/layout/activity_forgot_password.xml" value="0.37395833333333334" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.37395833333333334" />
-        <entry key="app/src/main/res/layout/activity_register.xml" value="0.3880208333333333" />
+        <entry key="app/src/main/res/layout/activity_register.xml" value="0.35572139303482586" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.3472335815429688" />
+        <entry key="app/src/main/res/layout/progress_dialog.xml" value="0.45" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1875" />
       </map>
     </option>
