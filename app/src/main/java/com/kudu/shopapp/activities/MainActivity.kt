@@ -18,5 +18,6 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences(Constants.SHOPAPP_PREFERENCES, Context.MODE_PRIVATE)
         val username = sharedPreferences.getString(Constants.LOGGED_IN_USERNAME, "")!!
         binding.tvMain.text = "Hello $username."
+        binding.tvMain.text = "Hello $username."
     }
 }
