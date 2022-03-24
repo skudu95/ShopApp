@@ -4,12 +4,15 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import com.google.firebase.auth.FirebaseAuth
 import com.kudu.shopapp.R
 import com.kudu.shopapp.databinding.ActivityLoginBinding
+import com.kudu.shopapp.firestore.Firestore
+import com.kudu.shopapp.model.User
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
 
@@ -89,18 +92,26 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             //login using firebaseAuth
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
-
-                    hideProgressDialog()
-
                     if (task.isSuccessful) {
-                        //TODO: send user to main activity
-                        showErrorSnackBar("Login Successful..!!", false)
+                        Firestore().getUserDetails(this@LoginActivity)
                     } else {
+                        hideProgressDialog()
                         showErrorSnackBar(task.exception!!.message.toString(), true)
                     }
                 }
         }
 
+    }
+
+    fun userLoggedInSuccess(user: User){
+        hideProgressDialog()
+
+        Log.i("First Name: ", user.firstname)
+        Log.i("Last Name: ", user.lastName)
+        Log.i("Email: ", user.email)
+
+        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        finish()
     }
 
 
