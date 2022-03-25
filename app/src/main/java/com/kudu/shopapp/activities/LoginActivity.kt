@@ -13,6 +13,7 @@ import com.kudu.shopapp.R
 import com.kudu.shopapp.databinding.ActivityLoginBinding
 import com.kudu.shopapp.firestore.Firestore
 import com.kudu.shopapp.model.User
+import com.kudu.shopapp.util.Constants
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
 
@@ -103,14 +104,21 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     }
 
-    fun userLoggedInSuccess(user: User){
+    fun userLoggedInSuccess(user: User) {
         hideProgressDialog()
 
         Log.i("First Name: ", user.firstname)
         Log.i("Last Name: ", user.lastName)
         Log.i("Email: ", user.email)
 
-        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        if (user.profileCompleted == 0) {
+            val intent = Intent(this@LoginActivity, UserProfileActivity::class.java)
+            intent.putExtra(Constants.EXTRA_USER_DETAILS, user)
+            startActivity(intent)
+
+        } else {
+            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        }
         finish()
     }
 
