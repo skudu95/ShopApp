@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.kudu.shopapp.activities.LoginActivity
 import com.kudu.shopapp.activities.RegisterActivity
+import com.kudu.shopapp.activities.UserProfileActivity
 import com.kudu.shopapp.model.User
 import com.kudu.shopapp.util.Constants
 
@@ -40,7 +41,6 @@ class Firestore {
             }
     }
 
-
     fun getCurrentUserId(): String {
         // an instance of current user using firebase auth
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -52,7 +52,6 @@ class Firestore {
         }
         return currentUserId
     }
-
 
     fun getUserDetails(activity: Activity) {
         //passing the collection name from which data is to be retrieved
@@ -91,6 +90,27 @@ class Firestore {
                 Log.e(activity.javaClass.simpleName, "Error while getting user details.", e)
             }
 
+    }
+
+    fun updateUserProfileData(activity: Activity, userHashMap: HashMap<String, Any>) {
+        mFireStore.collection(Constants.USERS)
+            .document(getCurrentUserId())
+            .update(userHashMap)
+            .addOnSuccessListener {
+                when (activity) {
+                    is UserProfileActivity -> {
+                        activity.userProfileUpdateSuccess()
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                when (activity) {
+                    is UserProfileActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
+                Log.e(activity.javaClass.simpleName, "Error while updating user details.", e)
+            }
     }
 
 
