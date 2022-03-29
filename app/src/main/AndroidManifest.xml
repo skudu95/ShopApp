@@ -3,7 +3,7 @@
     package="com.kudu.shopapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -12,6 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShopApp">
+        <activity
+            android:name=".activities.DashboardActivity"
+            android:exported="false"
+            android:label="@string/app_name" />
         <activity
             android:name=".activities.UserProfileActivity"
             android:exported="false"

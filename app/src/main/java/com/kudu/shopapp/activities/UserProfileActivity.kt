@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -23,6 +24,8 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityUserProfileBinding
     private lateinit var mUserDetails: User
+    private var mSelectedImageFileUri: Uri? = null
+    private var mUserProfileImageUrl: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,26 +67,14 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
                     }
                 }
                 R.id.btn_save -> {
-                    if (validateUserprofileDetails()) {
-
-                        val userHashMap = HashMap<String, Any>()
-                        val mobileNumber = binding.etMobileNumber.text.toString().trim { it <= ' ' }
-                        val gender = if (binding.rbMale.isChecked) {
-                            Constants.MALE
-                        } else {
-                            Constants.FEMALE
-                        }
-
-                        if (mobileNumber.isNotEmpty()) {
-                            userHashMap[Constants.MOBILE] = mobileNumber.toLong()
-                        }
-                        //getting a key value
-                        userHashMap[Constants.GENDER] = gender
-
+                    if (validateUserProfileDetails()) {
                         showProgressDialog(resources.getString(R.string.please_wait))
 
-                        Firestore().updateUserProfileData(this@UserProfileActivity, userHashMap)
-//                        showErrorSnackBar("Your details are valid. You can update them.", false)
+                        if (mSelectedImageFileUri != null) {
+                            Firestore().uploadImageToCloudStorage(this, mSelectedImageFileUri)
+                        } else {
+                            updateUserProfileDetails()
+                        }
                     }
                 }
 
@@ -129,9 +120,9 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
                 if (data != null) {
                     try {
                         // the uri of selected image from phone storage
-                        val selectedImageFilterUri = data.data!!
+                        mSelectedImageFileUri = data.data!!
 //                        binding.ivUserPhoto.setImageURI(Uri.parse(selectedImageFilterUri.toString()))
-                        GlideLoader(this).loadUserPicture(selectedImageFilterUri,
+                        GlideLoader(this).loadUserPicture(mSelectedImageFileUri!!,
                             binding.ivUserPhoto)
                     } catch (e: IOException) {
                         e.printStackTrace()
@@ -147,7 +138,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
     }
 
 
-    private fun validateUserprofileDetails(): Boolean {
+    private fun validateUserProfileDetails(): Boolean {
         return when {
             TextUtils.isEmpty(binding.etMobileNumber.text.toString().trim { it <= ' ' }) -> {
                 showErrorSnackBar(resources.getString(R.string.err_msg_enter_mobile_number), true)
@@ -157,6 +148,34 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
                 true
             }
         }
+    }
+
+    fun imageUploadSuccess(imageUrl: String) {
+        mUserProfileImageUrl = imageUrl
+        updateUserProfileDetails()
+    }
+
+
+    private fun updateUserProfileDetails() {
+        val userHashMap = HashMap<String, Any>()
+        val mobileNumber = binding.etMobileNumber.text.toString().trim { it <= ' ' }
+        val gender = if (binding.rbMale.isChecked) {
+            Constants.MALE
+        } else {
+            Constants.FEMALE
+        }
+
+        if (mUserProfileImageUrl.isNotEmpty()) {
+            userHashMap[Constants.IMAGE] = mUserProfileImageUrl
+        }
+
+        if (mobileNumber.isNotEmpty()) {
+            userHashMap[Constants.MOBILE] = mobileNumber.toLong()
+        }
+        //getting a key value
+        userHashMap[Constants.GENDER] = gender
+        userHashMap[Constants.COMPLETE_PROFILE] = 1
+        Firestore().updateUserProfileData(this@UserProfileActivity, userHashMap)
     }
 
 

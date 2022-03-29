@@ -11,13 +11,16 @@
         <entry key="app/src/main/res/drawable/drawable_gender_tab_text_color_selector.xml" value="0.2085" />
         <entry key="app/src/main/res/drawable/toolbar_background.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_base.xml" value="0.1887031408308004" />
+        <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.37395833333333334" />
         <entry key="app/src/main/res/layout/activity_forgot_password.xml" value="0.37395833333333334" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.37395833333333334" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.35572139303482586" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.3472335815429688" />
         <entry key="app/src/main/res/layout/activity_user_profile.xml" value="0.3880208333333333" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/progress_dialog.xml" value="0.45" />
+        <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.382051282051282" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1875" />
       </map>
     </option>
