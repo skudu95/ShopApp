@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.kudu.shopapp.databinding.FragmentNotificationsBinding
+import com.kudu.shopapp.databinding.FragmentOrdersBinding
 
-class NotificationsFragment : Fragment() {
+class OrdersFragment : Fragment() {
 
-    private var _binding: FragmentNotificationsBinding? = null
+    private var _binding: FragmentOrdersBinding? = null
 
     private val binding get() = _binding!!
 
@@ -20,12 +20,12 @@ class NotificationsFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
 
-        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
+        _binding = FragmentOrdersBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textNotifications
 
-        textView.text = "This is Notifications Fragment"
+        textView.text = "This is Orders Fragment"
 
         return root
     }

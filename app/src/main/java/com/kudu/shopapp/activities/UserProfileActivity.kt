@@ -18,6 +18,7 @@ import com.kudu.shopapp.firestore.Firestore
 import com.kudu.shopapp.model.User
 import com.kudu.shopapp.util.Constants
 import com.kudu.shopapp.util.GlideLoader
+import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.IOException
 
 class UserProfileActivity : BaseActivity(), View.OnClickListener {
@@ -36,17 +37,45 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
             //get the user details from intent as ParcelableExtra
             mUserDetails = intent.getParcelableExtra(Constants.EXTRA_USER_DETAILS)!!
         }
-        binding.etFirstName.isEnabled = false
+
         binding.etFirstName.setText(mUserDetails.firstname)
-
-        binding.etLastName.isEnabled = false
         binding.etLastName.setText(mUserDetails.lastName)
-
         binding.etEmail.isEnabled = false
         binding.etEmail.setText(mUserDetails.email)
 
+        if (mUserDetails.profileCompleted == 0) {
+            binding.tvTitle.text = resources.getString(R.string.title_complete_profile)
+            binding.etFirstName.isEnabled = false
+            binding.etLastName.isEnabled = false
+        } else {
+            setUpActionBar()
+            binding.tvTitle.text = resources.getString(R.string.title_edit_profile)
+            GlideLoader(this@UserProfileActivity).loadUserPicture(mUserDetails.image,
+                binding.ivUserPhoto)
+
+            if (mUserDetails.mobile != 0L) {
+                binding.etMobileNumber.setText(mUserDetails.mobile.toString())
+            }
+            if (mUserDetails.gender == Constants.MALE) {
+                binding.rbMale.isChecked = true
+            } else {
+                binding.rbFemale.isChecked = true
+            }
+        }
+
         binding.ivUserPhoto.setOnClickListener(this@UserProfileActivity)
         binding.btnSave.setOnClickListener(this@UserProfileActivity)
+    }
+
+    private fun setUpActionBar() {
+        setSupportActionBar(toolbar_settings_activity)
+
+        val actionBar = supportActionBar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeAsUpIndicator(R.drawable.back_icon_white)
+        }
+        binding.toolbarUserProfileActivity.setNavigationOnClickListener { onBackPressed() }
     }
 
 
@@ -80,15 +109,6 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
             }
         }
-    }
-
-    fun userProfileUpdateSuccess() {
-        hideProgressDialog()
-        Toast.makeText(this,
-            resources.getString(R.string.msg_profile_update_success),
-            Toast.LENGTH_SHORT).show()
-        startActivity(Intent(this@UserProfileActivity, MainActivity::class.java))
-        finish()
     }
 
     override fun onRequestPermissionsResult(
@@ -158,6 +178,14 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
     private fun updateUserProfileDetails() {
         val userHashMap = HashMap<String, Any>()
+        val firstName = binding.etFirstName.text.toString().trim { it <= ' ' }
+        if (firstName != mUserDetails.firstname) {
+            userHashMap[Constants.FIRST_NAME] = firstName
+        }
+        val lastName = binding.etLastName.text.toString().trim { it <= ' ' }
+        if (lastName != mUserDetails.lastName) {
+            userHashMap[Constants.LAST_NAME] = lastName
+        }
         val mobileNumber = binding.etMobileNumber.text.toString().trim { it <= ' ' }
         val gender = if (binding.rbMale.isChecked) {
             Constants.MALE
@@ -169,8 +197,11 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
             userHashMap[Constants.IMAGE] = mUserProfileImageUrl
         }
 
-        if (mobileNumber.isNotEmpty()) {
+        if (mobileNumber.isNotEmpty() && mobileNumber != mUserDetails.mobile.toString()) {
             userHashMap[Constants.MOBILE] = mobileNumber.toLong()
+        }
+        if (gender.isNotEmpty() && gender != mUserDetails.gender) {
+            userHashMap[Constants.GENDER] = gender
         }
         //getting a key value
         userHashMap[Constants.GENDER] = gender
@@ -178,5 +209,12 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
         Firestore().updateUserProfileData(this@UserProfileActivity, userHashMap)
     }
 
-
+    fun userProfileUpdateSuccess() {
+        hideProgressDialog()
+        Toast.makeText(this,
+            resources.getString(R.string.msg_profile_update_success),
+            Toast.LENGTH_SHORT).show()
+        startActivity(Intent(this@UserProfileActivity, DashboardActivity::class.java))
+        finish()
+    }
 }

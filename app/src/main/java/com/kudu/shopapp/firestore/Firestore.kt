@@ -12,6 +12,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.kudu.shopapp.activities.LoginActivity
 import com.kudu.shopapp.activities.RegisterActivity
+import com.kudu.shopapp.activities.SettingsActivity
 import com.kudu.shopapp.activities.UserProfileActivity
 import com.kudu.shopapp.model.User
 import com.kudu.shopapp.util.Constants
@@ -82,11 +83,17 @@ class Firestore {
                         //calling a function of base activity for transferring the result to it
                         activity.userLoggedInSuccess(user)
                     }
+                    is SettingsActivity -> {
+                        activity.userDetailsSuccess(user)
+                    }
                 }
             }
             .addOnFailureListener { e ->
                 when (activity) {
                     is LoginActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is SettingsActivity -> {
                         activity.hideProgressDialog()
                     }
                 }
