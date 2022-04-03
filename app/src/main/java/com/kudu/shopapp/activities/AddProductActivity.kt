@@ -2,9 +2,12 @@ package com.kudu.shopapp.activities
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -12,6 +15,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.kudu.shopapp.R
 import com.kudu.shopapp.databinding.ActivityAddProductBinding
+import com.kudu.shopapp.firestore.Firestore
+import com.kudu.shopapp.model.Product
 import com.kudu.shopapp.util.Constants
 import com.kudu.shopapp.util.GlideLoader
 import kotlinx.android.synthetic.main.activity_add_product.*
@@ -21,6 +26,9 @@ class AddProductActivity : BaseActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityAddProductBinding
 
+    private var mSelectedImageFileUri: Uri? = null
+    private var mProductImageUrl: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddProductBinding.inflate(layoutInflater)
@@ -28,6 +36,7 @@ class AddProductActivity : BaseActivity(), View.OnClickListener {
 
         setUpActionBar()
         binding.ivAddUpdateProduct.setOnClickListener(this)
+        binding.btnSubmitAP.setOnClickListener(this)
     }
 
     private fun setUpActionBar() {
@@ -57,8 +66,50 @@ class AddProductActivity : BaseActivity(), View.OnClickListener {
                         )
                     }
                 }
+                R.id.btn_submitAP -> {
+                    if (validateProductDetails()) {
+                        uploadProductImage()
+                    }
+                }
             }
         }
+    }
+
+    private fun uploadProductImage() {
+        showProgressDialog(resources.getString(R.string.please_wait))
+        Firestore().uploadImageToCloudStorage(this, mSelectedImageFileUri, Constants.PRODUCT_IMAGE)
+    }
+
+    fun productUploadSuccess() {
+        hideProgressDialog()
+        Toast.makeText(this,
+            resources.getString(R.string.product_uploaded_success_message),
+            Toast.LENGTH_SHORT).show()
+        finish()
+    }
+
+    fun imageUploadSuccess(imageUrl: String) {
+        /*   hideProgressDialog()
+           showErrorSnackBar("Product image uploaded successfully. Image URL: $imageUrl", false)*/
+        mProductImageUrl = imageUrl
+
+        // TODO uploadProductDetails()
+    }
+
+    private fun uploadProductDetails() {
+        val username =
+            this.getSharedPreferences(Constants.SHOPAPP_PREFERENCES, Context.MODE_PRIVATE)
+                .getString(Constants.LOGGED_IN_USERNAME, "")!!
+
+        val product = Product(
+            Firestore().getCurrentUserId(),
+            username,
+            binding.etProductTitle.text.toString().trim { it <= ' ' },
+            binding.etProductPrice.text.toString().trim { it <= ' ' },
+            binding.etProductDescription.text.toString().trim { it <= ' ' },
+            binding.etProductQuantity.text.toString().trim { it <= ' ' },
+            mProductImageUrl
+        )
     }
 
     override fun onRequestPermissionsResult(
@@ -81,7 +132,6 @@ class AddProductActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
@@ -91,9 +141,10 @@ class AddProductActivity : BaseActivity(), View.OnClickListener {
                     binding.ivAddUpdateProduct.setImageDrawable(ContextCompat.getDrawable(this,
                         R.drawable.edit_icon))
 
-                    val selectedImageProfileUri = data.data!!
+                    mSelectedImageFileUri = data.data!!
                     try {
-                        GlideLoader(this).loadUserPicture(selectedImageProfileUri, iv_product_image)
+                        GlideLoader(this).loadUserPicture(mSelectedImageFileUri!!,
+                            iv_product_image)
                     } catch (e: IOException) {
                         e.printStackTrace()
                         Toast.makeText(this@AddProductActivity,
@@ -106,5 +157,36 @@ class AddProductActivity : BaseActivity(), View.OnClickListener {
             Log.e("Request Cancelled", "Image selection cancelled")
         }
     }
+
+    private fun validateProductDetails(): Boolean {
+        return when {
+            mSelectedImageFileUri == null -> {
+                showErrorSnackBar(resources.getString(R.string.err_msg_select_product_image), true)
+                false
+            }
+            TextUtils.isEmpty(binding.etProductTitle.text.toString().trim { it <= ' ' }) -> {
+                showErrorSnackBar(resources.getString(R.string.err_msg_enter_product_title), true)
+                false
+            }
+            TextUtils.isEmpty(binding.etProductPrice.text.toString().trim { it <= ' ' }) -> {
+                showErrorSnackBar(resources.getString(R.string.err_msg_enter_product_price), true)
+                false
+            }
+            TextUtils.isEmpty(binding.etProductDescription.text.toString().trim { it <= ' ' }) -> {
+                showErrorSnackBar(resources.getString(R.string.err_msg_enter_product_description),
+                    true)
+                false
+            }
+            TextUtils.isEmpty(binding.etProductQuantity.text.toString().trim { it <= ' ' }) -> {
+                showErrorSnackBar(resources.getString(R.string.err_msg_enter_product_quantity),
+                    true)
+                false
+            }
+            else -> {
+                true
+            }
+        }
+    }
+
 
 }

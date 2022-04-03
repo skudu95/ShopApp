@@ -100,7 +100,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
                         showProgressDialog(resources.getString(R.string.please_wait))
 
                         if (mSelectedImageFileUri != null) {
-                            Firestore().uploadImageToCloudStorage(this, mSelectedImageFileUri)
+                            Firestore().uploadImageToCloudStorage(this, mSelectedImageFileUri, Constants.USER_PROFILE_IMAGE)
                         } else {
                             updateUserProfileDetails()
                         }

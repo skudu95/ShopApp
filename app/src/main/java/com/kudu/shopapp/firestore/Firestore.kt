@@ -10,10 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.kudu.shopapp.activities.LoginActivity
-import com.kudu.shopapp.activities.RegisterActivity
-import com.kudu.shopapp.activities.SettingsActivity
-import com.kudu.shopapp.activities.UserProfileActivity
+import com.kudu.shopapp.activities.*
 import com.kudu.shopapp.model.User
 import com.kudu.shopapp.util.Constants
 
@@ -123,10 +120,14 @@ class Firestore {
             }
     }
 
-    fun uploadImageToCloudStorage(activity: Activity, imageFileURI: Uri?) {
+    fun uploadImageToCloudStorage(activity: Activity, imageFileURI: Uri?, imageType: String) {
+        /* val sRef: StorageReference =
+             FirebaseStorage.getInstance().reference.child("user-profile-images/" + imageType + System.currentTimeMillis() + "."
+                     + Constants.getFileExtension(
+                 activity,
+                 imageFileURI))*/
         val sRef: StorageReference =
-            FirebaseStorage.getInstance().reference.child("user-profile-images/" + Constants.USER_PROFILE_IMAGE + System.currentTimeMillis() + "."
-                    + Constants.getFileExtension(
+            FirebaseStorage.getInstance().reference.child(imageType + System.currentTimeMillis() + "." + Constants.getFileExtension(
                 activity,
                 imageFileURI))
         //adding the file to reference
@@ -145,6 +146,9 @@ class Firestore {
                             is UserProfileActivity -> {
                                 activity.imageUploadSuccess(uri.toString())
                             }
+                            is AddProductActivity -> {
+                                activity.imageUploadSuccess(uri.toString())
+                            }
                         }
                     }
             }
@@ -152,6 +156,9 @@ class Firestore {
                 // Hide the progress dialog if there is any error. And print the error in log.
                 when (activity) {
                     is UserProfileActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is AddProductActivity -> {
                         activity.hideProgressDialog()
                     }
                 }

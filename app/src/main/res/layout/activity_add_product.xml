@@ -171,7 +171,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.kudu.shopapp.util.CustomButton
-                android:id="@+id/btn_submit"
+                android:id="@+id/btn_submitAP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
