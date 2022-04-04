@@ -107,7 +107,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     fun userLoggedInSuccess(user: User) {
         hideProgressDialog()
 
-        Log.i("First Name: ", user.firstname)
+        Log.i("First Name: ", user.firstName)
         Log.i("Last Name: ", user.lastName)
         Log.i("Email: ", user.email)
 

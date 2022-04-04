@@ -49,7 +49,7 @@ class SettingsActivity : BaseActivity(), View.OnClickListener {
         mUserDetails = user
         hideProgressDialog()
         GlideLoader(this@SettingsActivity).loadUserPicture(user.image, binding.ivUserPhoto)
-        binding.tvName.text = "${user.firstname} ${user.lastName}"
+        binding.tvName.text = "${user.firstName} ${user.lastName}"
         binding.tvGender.text = user.gender
         binding.tvEmail.text = user.email
         binding.tvMobileNumber.text = "${user.mobile}"

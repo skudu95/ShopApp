@@ -19,6 +19,7 @@ import com.kudu.shopapp.model.User
 import com.kudu.shopapp.util.Constants
 import com.kudu.shopapp.util.GlideLoader
 import kotlinx.android.synthetic.main.activity_settings.*
+import kotlinx.android.synthetic.main.activity_user_profile.*
 import java.io.IOException
 
 class UserProfileActivity : BaseActivity(), View.OnClickListener {
@@ -38,7 +39,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
             mUserDetails = intent.getParcelableExtra(Constants.EXTRA_USER_DETAILS)!!
         }
 
-        binding.etFirstName.setText(mUserDetails.firstname)
+        binding.etFirstName.setText(mUserDetails.firstName)
         binding.etLastName.setText(mUserDetails.lastName)
         binding.etEmail.isEnabled = false
         binding.etEmail.setText(mUserDetails.email)
@@ -68,7 +69,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun setUpActionBar() {
-        setSupportActionBar(toolbar_settings_activity)
+        setSupportActionBar(toolbar_user_profile_activity)
 
         val actionBar = supportActionBar
         if (actionBar != null) {
@@ -179,7 +180,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
     private fun updateUserProfileDetails() {
         val userHashMap = HashMap<String, Any>()
         val firstName = binding.etFirstName.text.toString().trim { it <= ' ' }
-        if (firstName != mUserDetails.firstname) {
+        if (firstName != mUserDetails.firstName) {
             userHashMap[Constants.FIRST_NAME] = firstName
         }
         val lastName = binding.etLastName.text.toString().trim { it <= ' ' }

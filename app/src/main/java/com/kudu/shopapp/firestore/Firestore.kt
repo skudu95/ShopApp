@@ -11,6 +11,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.kudu.shopapp.activities.*
+import com.kudu.shopapp.model.Product
 import com.kudu.shopapp.model.User
 import com.kudu.shopapp.util.Constants
 
@@ -72,7 +73,7 @@ class Firestore {
                 val editor: SharedPreferences.Editor = sharedPreferences.edit()
                 //Key: logged_in_username
                 //value: firstname and lastName
-                editor.putString(Constants.LOGGED_IN_USERNAME, "${user.firstname} ${user.lastName}")
+                editor.putString(Constants.LOGGED_IN_USERNAME, "${user.firstName} ${user.lastName}")
                 editor.apply()
 
                 when (activity) {
@@ -164,6 +165,19 @@ class Firestore {
                 }
                 Log.e(activity.javaClass.simpleName, exception.message, exception
                 )
+            }
+    }
+
+    fun uploadProductDetails(activity: AddProductActivity, productInfo: Product) {
+        mFireStore.collection(Constants.PRODUCTS)
+            .document()
+            .set(productInfo, SetOptions.merge())
+            .addOnSuccessListener {
+                activity.productUploadSuccess()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error uploading product details...", e)
             }
     }
 

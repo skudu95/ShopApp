@@ -93,7 +93,7 @@ class AddProductActivity : BaseActivity(), View.OnClickListener {
            showErrorSnackBar("Product image uploaded successfully. Image URL: $imageUrl", false)*/
         mProductImageUrl = imageUrl
 
-        // TODO uploadProductDetails()
+        uploadProductDetails()
     }
 
     private fun uploadProductDetails() {
@@ -110,6 +110,8 @@ class AddProductActivity : BaseActivity(), View.OnClickListener {
             binding.etProductQuantity.text.toString().trim { it <= ' ' },
             mProductImageUrl
         )
+
+        Firestore().uploadProductDetails(this, product)
     }
 
     override fun onRequestPermissionsResult(
