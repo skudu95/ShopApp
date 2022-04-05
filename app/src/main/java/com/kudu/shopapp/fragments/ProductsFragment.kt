@@ -3,14 +3,15 @@ package com.kudu.shopapp.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.kudu.shopapp.R
 import com.kudu.shopapp.activities.AddProductActivity
-import com.kudu.shopapp.activities.SettingsActivity
+import com.kudu.shopapp.adapter.ProductListAdapter
 import com.kudu.shopapp.databinding.FragmentProductsBinding
+import com.kudu.shopapp.firestore.Firestore
+import com.kudu.shopapp.model.Product
 
-class ProductsFragment : Fragment() {
+class ProductsFragment : BaseFragment() {
 
     private var _binding: FragmentProductsBinding? = null
 
@@ -19,6 +20,30 @@ class ProductsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+    }
+
+    fun successProductListFromFirestore(productList: ArrayList<Product>) {
+        hideProgressDialog()
+
+        if (productList.size > 0) {
+            binding.rvMyProductItems.visibility = View.VISIBLE
+            binding.tvNoProductsFound.visibility = View.GONE
+
+            binding.rvMyProductItems.layoutManager = LinearLayoutManager(activity)
+            binding.rvMyProductItems.setHasFixedSize(true)
+            val adapterProducts = ProductListAdapter(requireActivity(), productList)
+            binding.rvMyProductItems.adapter = adapterProducts
+        }
+    }
+
+    private fun getProductListFromFirestore() {
+        showProgressDialog(resources.getString(R.string.please_wait))
+        Firestore().getProductList(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getProductListFromFirestore()
     }
 
     override fun onCreateView(
@@ -30,9 +55,6 @@ class ProductsFragment : Fragment() {
         _binding = FragmentProductsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
-
-        textView.text = "This is Products Fragment"
         return root
     }
 

@@ -5,12 +5,15 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
+import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.kudu.shopapp.activities.*
+import com.kudu.shopapp.fragments.DashboardFragment
+import com.kudu.shopapp.fragments.ProductsFragment
 import com.kudu.shopapp.model.Product
 import com.kudu.shopapp.model.User
 import com.kudu.shopapp.util.Constants
@@ -178,6 +181,48 @@ class Firestore {
             .addOnFailureListener { e ->
                 activity.hideProgressDialog()
                 Log.e(activity.javaClass.simpleName, "Error uploading product details...", e)
+            }
+    }
+
+    fun getProductList(fragment: Fragment) {
+        mFireStore.collection(Constants.PRODUCTS)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserId())
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e("Product List", document.documents.toString())
+                val productList: ArrayList<Product> = ArrayList()
+                for (i in document.documents) {
+                    val product = i.toObject(Product::class.java)
+                    product!!.id = i.id
+                    productList.add(product)
+                }
+                when (fragment) {
+                    is ProductsFragment -> {
+                        fragment.successProductListFromFirestore(productList)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e(fragment.javaClass.simpleName, "Error while getting product item list", e)
+            }
+    }
+
+    fun getDashboardItemsList(fragment: DashboardFragment) {
+        mFireStore.collection(Constants.PRODUCTS)
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e("Product List", document.documents.toString())
+                val productList: ArrayList<Product> = ArrayList()
+                for (i in document.documents) {
+                    val product = i.toObject(Product::class.java)
+                    product!!.id = i.id
+                    productList.add(product)
+                }
+                fragment.successDashboardItemsList(productList)
+            }
+            .addOnFailureListener { e ->
+                fragment.hideProgressDialog()
+                Log.e(fragment.javaClass.simpleName, "Error while getting dashboard item list", e)
             }
     }
 
