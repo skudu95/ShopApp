@@ -1,8 +1,10 @@
 package com.kudu.shopapp.fragments
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kudu.shopapp.R
 import com.kudu.shopapp.activities.AddProductActivity
@@ -22,6 +24,41 @@ class ProductsFragment : BaseFragment() {
         setHasOptionsMenu(true)
     }
 
+    fun deleteProduct(productId: String) {
+        showAlertDialogToDeleteProduct(productId)
+    }
+
+    private fun showAlertDialogToDeleteProduct(productId: String) {
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setTitle(resources.getString(R.string.delete_dialog_title))
+        builder.setMessage(resources.getString(R.string.delete_dialog_message))
+        builder.setIcon(R.drawable.alert_icon)
+        //performing positive action
+        builder.setPositiveButton(resources.getString(R.string.yes)) { dialogInterface, _ ->
+            showProgressDialog(resources.getString(R.string.please_wait))
+            Firestore().deleteProduct(this, productId)
+            dialogInterface.dismiss()
+        }
+        //performing negative action
+        builder.setNegativeButton(resources.getString(R.string.no)) { dialogInterface, _ ->
+            dialogInterface.dismiss()
+        }
+        //creating AlertDialog
+        val alertDialog: AlertDialog = builder.create()
+        //setting properties
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
+    fun productDeleteSuccess() {
+        hideProgressDialog()
+        Toast.makeText(requireActivity(),
+            resources.getString(R.string.product_delete_success_message),
+            Toast.LENGTH_SHORT).show()
+
+        getProductListFromFirestore()
+    }
+
     fun successProductListFromFirestore(productList: ArrayList<Product>) {
         hideProgressDialog()
 
@@ -31,8 +68,11 @@ class ProductsFragment : BaseFragment() {
 
             binding.rvMyProductItems.layoutManager = LinearLayoutManager(activity)
             binding.rvMyProductItems.setHasFixedSize(true)
-            val adapterProducts = ProductListAdapter(requireActivity(), productList)
+            val adapterProducts = ProductListAdapter(requireActivity(), productList, this)
             binding.rvMyProductItems.adapter = adapterProducts
+        } else {
+            binding.rvMyProductItems.visibility = View.GONE
+            binding.tvNoProductsFound.visibility = View.VISIBLE
         }
     }
 
@@ -73,4 +113,6 @@ class ProductsFragment : BaseFragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+
 }

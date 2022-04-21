@@ -2,10 +2,11 @@ package com.kudu.shopapp.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import androidx.recyclerview.widget.GridLayoutManager
 import com.kudu.shopapp.R
 import com.kudu.shopapp.activities.SettingsActivity
+import com.kudu.shopapp.adapter.DashboardItemAdapter
 import com.kudu.shopapp.databinding.FragmentDashboardBinding
 import com.kudu.shopapp.firestore.Firestore
 import com.kudu.shopapp.model.Product
@@ -56,8 +57,20 @@ class DashboardFragment : BaseFragment() {
 
     fun successDashboardItemsList(dashboardItemsList: ArrayList<Product>) {
         hideProgressDialog()
-        for (i in dashboardItemsList) {
-            Log.i("Item Title", i.title)
+
+        if (dashboardItemsList.size > 0) {
+            binding.rvDashboardItems.visibility = View.VISIBLE
+            binding.tvNoDashboardItemsFound.visibility = View.GONE
+
+            binding.rvDashboardItems.layoutManager = GridLayoutManager(activity, 2)
+            binding.rvDashboardItems.setHasFixedSize(true)
+
+            val adapter = DashboardItemAdapter(requireActivity(), dashboardItemsList)
+            binding.rvDashboardItems.adapter = adapter
+
+        } else {
+            binding.rvDashboardItems.visibility = View.GONE
+            binding.tvNoDashboardItemsFound.visibility = View.VISIBLE
         }
     }
 
