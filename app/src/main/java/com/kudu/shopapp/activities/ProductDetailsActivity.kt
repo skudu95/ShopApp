@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.kudu.shopapp.R
 import com.kudu.shopapp.databinding.ActivityProductDetailsBinding
 import com.kudu.shopapp.firestore.Firestore
@@ -67,10 +68,19 @@ class ProductDetailsActivity : BaseActivity(), View.OnClickListener {
         binding.tvProductDetailsDescription.text = product.description
         binding.tvProductDetailsStockQuantity.text = product.stock_quantity
 
-        if (Firestore().getCurrentUserId() == product.user_id) {
+        if (product.stock_quantity.toInt() == 0) {
             hideProgressDialog()
+            binding.btnAddToCart.visibility = View.GONE
+            binding.tvProductDetailsStockQuantity.text =
+                resources.getString(R.string.lbl_out_of_stock)
+            binding.tvProductDetailsStockQuantity.setTextColor(ContextCompat.getColor(this,
+                R.color.colorSnackBarError))
         } else {
-            Firestore().checkIfItemExistsInCart(this, mProductId)
+            if (Firestore().getCurrentUserId() == product.user_id) {
+                hideProgressDialog()
+            } else {
+                Firestore().checkIfItemExistsInCart(this, mProductId)
+            }
         }
     }
 

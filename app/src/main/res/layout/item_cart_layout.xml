@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -80,7 +81,8 @@
                     android:contentDescription="@string/content_description"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:padding="@dimen/ib_cart_item_padding"
-                    android:src="@drawable/remove_icon" />
+                    android:src="@drawable/remove_icon"
+                    app:tint="@color/colorThemePink" />
 
                 <com.kudu.shopapp.util.CustomTextView
                     android:id="@+id/tv_cart_quantity"
@@ -107,7 +109,8 @@
                     android:contentDescription="@string/content_description"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:padding="@dimen/ib_cart_item_padding"
-                    android:src="@drawable/add_icon" />
+                    android:src="@drawable/add_icon"
+                    app:tint="@color/colorThemePink" />
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
@@ -116,6 +119,7 @@
         android:id="@+id/ib_delete_cart_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:background="@android:color/transparent"
         android:contentDescription="@string/content_description"
         android:foreground="?attr/selectableItemBackgroundBorderless"
