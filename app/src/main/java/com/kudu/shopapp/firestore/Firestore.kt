@@ -14,6 +14,7 @@ import com.google.firebase.storage.StorageReference
 import com.kudu.shopapp.activities.*
 import com.kudu.shopapp.fragments.DashboardFragment
 import com.kudu.shopapp.fragments.ProductsFragment
+import com.kudu.shopapp.model.CartItem
 import com.kudu.shopapp.model.Product
 import com.kudu.shopapp.model.User
 import com.kudu.shopapp.util.Constants
@@ -223,6 +224,66 @@ class Firestore {
                 Log.e(activity.javaClass.simpleName,
                     "Error while getting product details.",
                     e)
+            }
+    }
+
+    fun addToCartItems(activity: ProductDetailsActivity, addToCart: CartItem) {
+        mFireStore.collection(Constants.CART_ITEMS)
+            .document()
+            .set(addToCart, SetOptions.merge())
+            .addOnSuccessListener {
+                activity.addToCartSuccess()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while creating the cart items", e)
+            }
+    }
+
+    fun getCartList(activity: Activity) {
+        mFireStore.collection(Constants.CART_ITEMS)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserId())
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+                val list: ArrayList<CartItem> = ArrayList()
+                for (i in document.documents) {
+                    val cartItem = i.toObject(CartItem::class.java)!!
+                    cartItem.id = i.id
+                    list.add(cartItem)
+                }
+                when (activity) {
+                    is CartListActivity -> {
+                        activity.successCartItemsList(list)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                when (activity) {
+                    is CartListActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
+                Log.e(activity.javaClass.simpleName, "Error while geting the cart list items", e)
+            }
+    }
+
+    fun checkIfItemExistsInCart(activity: ProductDetailsActivity, productId: String) {
+        mFireStore.collection(Constants.CART_ITEMS)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserId())
+            .whereEqualTo(Constants.PRODUCT_ID, productId)
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+                if (document.documents.size > 0) {
+                    activity.checkProductExistsInCart()
+                } else {
+                    activity.hideProgressDialog()
+                }
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while checking existing cart list", e)
             }
     }
 

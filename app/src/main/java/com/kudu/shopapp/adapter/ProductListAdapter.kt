@@ -14,7 +14,11 @@ import com.kudu.shopapp.util.Constants
 import com.kudu.shopapp.util.GlideLoader
 import kotlinx.android.synthetic.main.item_list_layout.view.*
 
-open class ProductListAdapter(private val context: Context, private val list: ArrayList<Product>, private val fragment: ProductsFragment) :
+open class ProductListAdapter(
+    private val context: Context,
+    private val list: ArrayList<Product>,
+    private val fragment: ProductsFragment,
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -36,6 +40,7 @@ open class ProductListAdapter(private val context: Context, private val list: Ar
             holder.itemView.setOnClickListener {
                 val intent = Intent(context, ProductDetailsActivity::class.java)
                 intent.putExtra(Constants.EXTRA_PRODUCT_ID, model.id)
+                intent.putExtra(Constants.EXTRA_PRODUCT_OWNER_ID, model.user_id)
                 context.startActivity(intent)
             }
         }
