@@ -10,7 +10,7 @@ import com.kudu.shopapp.firestore.Firestore
 import com.kudu.shopapp.model.User
 import com.kudu.shopapp.util.Constants
 import com.kudu.shopapp.util.GlideLoader
-import kotlinx.android.synthetic.main.activity_settings.*
+
 
 class SettingsActivity : BaseActivity(), View.OnClickListener {
 
@@ -26,11 +26,12 @@ class SettingsActivity : BaseActivity(), View.OnClickListener {
         setUpActionBar()
         binding.btnLogout.setOnClickListener(this)
         binding.tvEdit.setOnClickListener(this)
+        binding.llAddress.setOnClickListener(this)
 
     }
 
     private fun setUpActionBar() {
-        setSupportActionBar(toolbar_settings_activity)
+        setSupportActionBar(binding.toolbarSettingsActivity)
 
         val actionBar = supportActionBar
         if (actionBar != null) {
@@ -74,6 +75,9 @@ class SettingsActivity : BaseActivity(), View.OnClickListener {
                     val intent = Intent(this@SettingsActivity, UserProfileActivity::class.java)
                     intent.putExtra(Constants.EXTRA_USER_DETAILS, mUserDetails)
                     startActivity(intent)
+                }
+                R.id.ll_address -> {
+                    startActivity(Intent(this, AddressListActivity::class.java))
                 }
             }
         }

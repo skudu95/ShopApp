@@ -23,6 +23,7 @@
         <entry key="app/src/main/res/drawable/ic_vector_chevron_right.xml" value="0.131" />
         <entry key="app/src/main/res/drawable/item_dashboard_background.xml" value="0.131" />
         <entry key="app/src/main/res/drawable/item_grey_border_background.xml" value="0.131" />
+        <entry key="app/src/main/res/drawable/item_primary_color_border_background.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/order_icon.xml" value="0.1075" />
         <entry key="app/src/main/res/drawable/orders_icon.xml" value="0.1935" />
         <entry key="app/src/main/res/drawable/products_icon.xml" value="0.1075" />
@@ -31,7 +32,9 @@
         <entry key="app/src/main/res/drawable/settings_icon.xml" value="0.1075" />
         <entry key="app/src/main/res/drawable/settings_icon_1.xml" value="0.1935" />
         <entry key="app/src/main/res/drawable/toolbar_background.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_add_edit_adress.xml" value="0.375" />
         <entry key="app/src/main/res/layout/activity_add_product.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_address_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_base.xml" value="0.1887031408308004" />
         <entry key="app/src/main/res/layout/activity_cart_list.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.25" />
