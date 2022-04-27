@@ -14,6 +14,7 @@ import com.google.firebase.storage.StorageReference
 import com.kudu.shopapp.activities.*
 import com.kudu.shopapp.fragments.DashboardFragment
 import com.kudu.shopapp.fragments.ProductsFragment
+import com.kudu.shopapp.model.Address
 import com.kudu.shopapp.model.CartItem
 import com.kudu.shopapp.model.Product
 import com.kudu.shopapp.model.User
@@ -384,5 +385,40 @@ class Firestore {
             }
     }
 
+    fun getAddressList(activity: AddressListActivity) {
+        mFireStore.collection(Constants.ADDRESSES)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserId())
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+
+                //creating an instance for address arraylist
+                val addressList: ArrayList<Address> = ArrayList()
+                for (i in document.documents) {
+                    val address = i.toObject(Address::class.java)!!
+                    address.id = i.id
+
+                    addressList.add(address)
+                }
+                activity.successAddressListFromFirestore(addressList)
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while getting address", e)
+            }
+    }
+
+    fun addAddress(activity: AddEditAddressActivity, addressInfo: Address) {
+        mFireStore.collection(Constants.ADDRESSES)
+            .document()
+            .set(addressInfo, SetOptions.merge())
+            .addOnSuccessListener {
+                activity.addUpdateAddressSuccess()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while adding the address", e)
+            }
+    }
 
 }

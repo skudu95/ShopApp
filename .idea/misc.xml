@@ -50,6 +50,7 @@
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/fragment_orders.xml" value="0.3880208333333333" />
         <entry key="app/src/main/res/layout/fragment_products.xml" value="0.1887031408308004" />
+        <entry key="app/src/main/res/layout/item_address_layout.xml" value="0.375" />
         <entry key="app/src/main/res/layout/item_cart_layout.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_dashboard_layout.xml" value="0.3601036269430052" />
         <entry key="app/src/main/res/layout/item_list_layout.xml" value="0.335" />
