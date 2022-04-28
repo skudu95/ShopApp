@@ -13,10 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShopApp">
         <activity
+            android:name=".activities.CheckoutActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ShopApp.NoActionBar" />
+        <activity
             android:name=".activities.AddEditAddressActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ShopApp.NoActionBar"/>
+            android:theme="@style/Theme.ShopApp.NoActionBar" />
         <activity
             android:name=".activities.AddressListActivity"
             android:exported="false"

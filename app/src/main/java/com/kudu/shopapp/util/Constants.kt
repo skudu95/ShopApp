@@ -35,6 +35,10 @@ object Constants {
     const val OFFICE: String = "Office"
     const val OTHER: String = "Other"
     const val ADDRESSES: String = "addresses"
+    const val EXTRA_ADDRESS_DETAILS: String = "AddressDetails"
+    const val EXTRA_SELECT_ADDRESS: String = "extra_select_address"
+    const val ADD_ADDRESS__CODE: Int = 123
+    const val EXTRA_SELECTED_ADDRESS: String = "extra_selected_address"
 
 
     fun showImageChooser(activity: Activity) {

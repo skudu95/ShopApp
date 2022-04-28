@@ -13,6 +13,7 @@
         <entry key="app/src/main/res/drawable/cart_icon_1.xml" value="0.1935" />
         <entry key="app/src/main/res/drawable/dashboard_icon_1.xml" value="0.1075" />
         <entry key="app/src/main/res/drawable/delete_icon.xml" value="0.1935" />
+        <entry key="app/src/main/res/drawable/delete_icon_while.xml" value="0.1685" />
         <entry key="app/src/main/res/drawable/drawable_gender_tab_selector.xml" value="0.2085" />
         <entry key="app/src/main/res/drawable/drawable_gender_tab_text_color_selector.xml" value="0.2085" />
         <entry key="app/src/main/res/drawable/ic_cart_1.xml" value="0.1935" />
@@ -37,6 +38,7 @@
         <entry key="app/src/main/res/layout/activity_address_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_base.xml" value="0.1887031408308004" />
         <entry key="app/src/main/res/layout/activity_cart_list.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_checkout.xml" value="0.32011331444759206" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_forgot_password.xml" value="0.37395833333333334" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.375" />

@@ -1,5 +1,6 @@
 package com.kudu.shopapp.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -10,6 +11,7 @@ import com.kudu.shopapp.databinding.ActivityCartListBinding
 import com.kudu.shopapp.firestore.Firestore
 import com.kudu.shopapp.model.CartItem
 import com.kudu.shopapp.model.Product
+import com.kudu.shopapp.util.Constants
 
 class CartListActivity : BaseActivity() {
 
@@ -23,6 +25,12 @@ class CartListActivity : BaseActivity() {
         setContentView(binding.root)
 
         setUpActionBar()
+
+        binding.btnCheckout.setOnClickListener {
+            val intent = Intent(this, AddressListActivity::class.java)
+            intent.putExtra(Constants.EXTRA_SELECT_ADDRESS, true)
+            startActivity(intent)
+        }
     }
 
     fun successCartItemsList(cartList: ArrayList<CartItem>) {
