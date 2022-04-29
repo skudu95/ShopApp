@@ -13,6 +13,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.kudu.shopapp.activities.*
 import com.kudu.shopapp.fragments.DashboardFragment
+import com.kudu.shopapp.fragments.OrdersFragment
 import com.kudu.shopapp.fragments.ProductsFragment
 import com.kudu.shopapp.model.*
 import com.kudu.shopapp.util.Constants
@@ -309,6 +310,57 @@ class Firestore {
             .addOnFailureListener { e ->
                 activity.hideProgressDialog()
                 Log.e(activity.javaClass.simpleName, "Error while checking existing cart list", e)
+            }
+    }
+
+    fun updateAllDetails(activity: CheckoutActivity, cartList: ArrayList<CartItem>) {
+        val writeBatch = mFireStore.batch() // batch allows to do multiple works at a time
+
+        for (cartItem in cartList) {
+            val productHashMap = HashMap<String, Any>()
+            productHashMap[Constants.STOCK_QUANTITY] =
+                (cartItem.stock_quantity.toInt() - cartItem.cart_quantity.toInt()).toString()
+
+            val documentRef = mFireStore.collection(Constants.PRODUCTS)
+                .document(cartItem.product_id)
+
+            writeBatch.update(documentRef, productHashMap)
+        }
+        //deleting cartItem
+        for (cartItem in cartList) {
+            val documentRef = mFireStore.collection(Constants.CART_ITEMS)
+                .document(cartItem.id)
+            writeBatch.delete(documentRef)
+        }
+
+        writeBatch.commit()
+            .addOnSuccessListener {
+                activity.allDetailsUpdatedSuccessfully()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName,
+                    "Error while updating all the details after order placed",
+                    e)
+            }
+    }
+
+    fun getMyOrdersList(fragment: OrdersFragment) {
+        mFireStore.collection(Constants.ORDERS)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserId())
+            .get()
+            .addOnSuccessListener { document ->
+                val list: ArrayList<Order> = ArrayList()
+                for (i in document.documents) {
+                    val orderItem = i.toObject(Order::class.java)!!
+                    orderItem.id = i.id
+                    list.add(orderItem)
+                }
+                fragment.populateOrdersList(list)
+            }
+            .addOnFailureListener { e ->
+                fragment.hideProgressDialog()
+                Log.e(fragment.javaClass.simpleName, "Error while getting orders list", e)
             }
     }
 

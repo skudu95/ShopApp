@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShopApp">
         <activity
+            android:name=".activities.MyOrderDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.CheckoutActivity"
             android:exported="false"
             android:screenOrientation="portrait"
