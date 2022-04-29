@@ -39,6 +39,7 @@ object Constants {
     const val EXTRA_SELECT_ADDRESS: String = "extra_select_address"
     const val ADD_ADDRESS__CODE: Int = 123
     const val EXTRA_SELECTED_ADDRESS: String = "extra_selected_address"
+    const val ORDERS: String = "orders"
 
 
     fun showImageChooser(activity: Activity) {

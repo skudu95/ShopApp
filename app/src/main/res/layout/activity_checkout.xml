@@ -185,7 +185,7 @@
                         android:textAlignment="center"
                         android:textColor="@color/colorSecondaryText"
                         android:textSize="@dimen/checkout_label_value_textSize"
-                        tools:text="$100" />
+                        tools:text="৳ 100" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -208,7 +208,7 @@
                         android:textAlignment="center"
                         android:textColor="@color/colorSecondaryText"
                         android:textSize="@dimen/checkout_label_value_textSize"
-                        tools:text="$10.0" />
+                        tools:text="৳ 10.0" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -231,7 +231,7 @@
                         android:textAlignment="center"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="@dimen/checkout_label_value_textSize"
-                        tools:text="$110" />
+                        tools:text="৳ 110" />
                 </LinearLayout>
 
             </LinearLayout>

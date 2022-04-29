@@ -14,10 +14,7 @@ import com.google.firebase.storage.StorageReference
 import com.kudu.shopapp.activities.*
 import com.kudu.shopapp.fragments.DashboardFragment
 import com.kudu.shopapp.fragments.ProductsFragment
-import com.kudu.shopapp.model.Address
-import com.kudu.shopapp.model.CartItem
-import com.kudu.shopapp.model.Product
-import com.kudu.shopapp.model.User
+import com.kudu.shopapp.model.*
 import com.kudu.shopapp.util.Constants
 
 class Firestore {
@@ -257,11 +254,17 @@ class Firestore {
                     is CartListActivity -> {
                         activity.successCartItemsList(list)
                     }
+                    is CheckoutActivity -> {
+                        activity.successCartItemsList(list)
+                    }
                 }
             }
             .addOnFailureListener { e ->
                 when (activity) {
                     is CartListActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is CheckoutActivity -> {
                         activity.hideProgressDialog()
                     }
                 }
@@ -309,6 +312,19 @@ class Firestore {
             }
     }
 
+    fun placeOrder(activity: CheckoutActivity, order: Order) {
+        mFireStore.collection(Constants.ORDERS)
+            .document()
+            .set(order, SetOptions.merge())
+            .addOnSuccessListener {
+                activity.orderPlacedSuccess()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while placing your order", e)
+            }
+    }
+
     fun deleteProduct(fragment: ProductsFragment, productId: String) {
         mFireStore.collection(Constants.PRODUCTS)
             .document(productId)
@@ -346,7 +362,7 @@ class Firestore {
             }
     }
 
-    fun getAllProductsList(activity: CartListActivity) {
+    fun getAllProductsList(activity: Activity) {
         mFireStore.collection(Constants.PRODUCTS)
             .get()
             .addOnSuccessListener { document ->
@@ -358,10 +374,24 @@ class Firestore {
 
                     productsList.add(product)
                 }
-                activity.successProductsListFromFirestore(productsList)
+                when (activity) {
+                    is CartListActivity -> {
+                        activity.successProductsListFromFirestore(productsList)
+                    }
+                    is CheckoutActivity -> {
+                        activity.successProductsListFromFirestore(productsList)
+                    }
+                }
             }
             .addOnFailureListener { e ->
-                activity.hideProgressDialog()
+                when (activity) {
+                    is CartListActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is CheckoutActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
                 Log.e("Get Product List", "Error while getting all product list", e)
             }
     }
