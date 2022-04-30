@@ -1,12 +1,15 @@
 package com.kudu.shopapp.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kudu.shopapp.R
+import com.kudu.shopapp.activities.MyOrderDetailsActivity
 import com.kudu.shopapp.model.Order
+import com.kudu.shopapp.util.Constants
 import com.kudu.shopapp.util.GlideLoader
 import kotlinx.android.synthetic.main.item_list_layout.view.*
 
@@ -41,11 +44,11 @@ open class MyOrdersListAdapter(
 
             holder.itemView.ib_delete_product.visibility = View.GONE
 
-            /*holder.itemView.setOnClickListener {
+            holder.itemView.setOnClickListener {
                 val intent = Intent(context, MyOrderDetailsActivity::class.java)
                 intent.putExtra(Constants.EXTRA_MY_ORDER_DETAILS, model)
                 context.startActivity(intent)
-            }*/
+            }
         }
     }
 

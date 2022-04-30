@@ -87,7 +87,8 @@ class CheckoutActivity : BaseActivity() {
                 mCartItemsList[0].image,
                 mSubTotal.toString(),
                 "80.0",//TODO: dynamically change shipping charge according to area(area to be implemented),
-                mTotalAmount.toString()
+                mTotalAmount.toString(),
+                System.currentTimeMillis()
             )
             Firestore().placeOrder(this, order)
         }
