@@ -15,6 +15,7 @@ import com.kudu.shopapp.activities.*
 import com.kudu.shopapp.fragments.DashboardFragment
 import com.kudu.shopapp.fragments.OrdersFragment
 import com.kudu.shopapp.fragments.ProductsFragment
+import com.kudu.shopapp.fragments.SoldProductsFragment
 import com.kudu.shopapp.model.*
 import com.kudu.shopapp.util.Constants
 
@@ -313,18 +314,32 @@ class Firestore {
             }
     }
 
-    fun updateAllDetails(activity: CheckoutActivity, cartList: ArrayList<CartItem>) {
+    fun updateAllDetails(activity: CheckoutActivity, cartList: ArrayList<CartItem>, order: Order) {
         val writeBatch = mFireStore.batch() // batch allows to do multiple works at a time
 
         for (cartItem in cartList) {
-            val productHashMap = HashMap<String, Any>()
+            /*val productHashMap = HashMap<String, Any>()
             productHashMap[Constants.STOCK_QUANTITY] =
-                (cartItem.stock_quantity.toInt() - cartItem.cart_quantity.toInt()).toString()
+                (cartItem.stock_quantity.toInt() - cartItem.cart_quantity.toInt()).toString()*/
+            val soldProduct = SoldProduct(
+                cartItem.product_owner_id,
+                cartItem.title,
+                cartItem.price,
+                cartItem.cart_quantity,
+                cartItem.image,
+                order.title,
+                order.order_date_time,
+                order.sub_total_amount,
+                order.shipping_charge,
+                order.total_amount,
+                order.address
+            )
 
-            val documentRef = mFireStore.collection(Constants.PRODUCTS)
+            val documentRef = mFireStore.collection(Constants.SOLD_PRODUCTS)
                 .document(cartItem.product_id)
 
-            writeBatch.update(documentRef, productHashMap)
+//            writeBatch.update(documentRef, soldProduct)
+            writeBatch.set(documentRef, soldProduct)
         }
         //deleting cartItem
         for (cartItem in cartList) {
@@ -341,6 +356,27 @@ class Firestore {
                 activity.hideProgressDialog()
                 Log.e(activity.javaClass.simpleName,
                     "Error while updating all the details after order placed",
+                    e)
+            }
+    }
+
+    fun getSoldProductsList(fragment: SoldProductsFragment) {
+        mFireStore.collection(Constants.SOLD_PRODUCTS)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserId())
+            .get()
+            .addOnSuccessListener { document ->
+                val list: ArrayList<SoldProduct> = ArrayList()
+                for (i in document.documents) {
+                    val soldProduct = i.toObject(SoldProduct::class.java)!!
+                    soldProduct.id = i.id
+                    list.add(soldProduct)
+                }
+                fragment.successSoldProductsList(list)
+            }
+            .addOnFailureListener { e ->
+                fragment.hideProgressDialog()
+                Log.e(fragment.javaClass.simpleName,
+                    "Error while getting the list of sold products",
                     e)
             }
     }

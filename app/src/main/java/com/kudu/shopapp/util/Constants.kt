@@ -42,6 +42,7 @@ object Constants {
     const val ORDERS: String = "orders"
     const val STOCK_QUANTITY: String = "stock_quantity"
     const val EXTRA_MY_ORDER_DETAILS: String = "extra_my_order_details"
+    const val SOLD_PRODUCTS: String = "sold_products"
 
 
     fun showImageChooser(activity: Activity) {

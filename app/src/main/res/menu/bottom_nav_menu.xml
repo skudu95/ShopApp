@@ -16,4 +16,8 @@
         android:icon="@drawable/orders_icon"
         android:title="@string/title_orders" />
 
+    <item
+        android:id="@+id/navigation_sold_products"
+        android:icon="@drawable/sold_icon"
+        android:title="@string/title_sold_products" />
 </menu>

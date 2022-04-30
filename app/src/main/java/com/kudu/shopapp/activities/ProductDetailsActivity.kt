@@ -20,6 +20,7 @@ class ProductDetailsActivity : BaseActivity(), View.OnClickListener {
 
     private var mProductId: String = ""
     private lateinit var mProductDetails: Product
+    private var mProductOwnerId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,11 +32,11 @@ class ProductDetailsActivity : BaseActivity(), View.OnClickListener {
         if (intent.hasExtra(Constants.EXTRA_PRODUCT_ID)) {
             mProductId = intent.getStringExtra(Constants.EXTRA_PRODUCT_ID)!!
         }
-        var productOwnerId = ""
+        //var productOwnerId = ""
         if (intent.hasExtra(Constants.EXTRA_PRODUCT_OWNER_ID)) {
-            productOwnerId = intent.getStringExtra(Constants.EXTRA_PRODUCT_OWNER_ID)!!
+            mProductOwnerId = intent.getStringExtra(Constants.EXTRA_PRODUCT_OWNER_ID)!!
         }
-        if (Firestore().getCurrentUserId() == productOwnerId) {
+        if (Firestore().getCurrentUserId() == mProductOwnerId) {
             binding.btnAddToCart.visibility = View.GONE
             binding.btnGoToCart.visibility = View.GONE
         } else {
@@ -98,6 +99,7 @@ class ProductDetailsActivity : BaseActivity(), View.OnClickListener {
     private fun addToCart() {
         val cartItem = CartItem(
             Firestore().getCurrentUserId(),
+            mProductOwnerId,
             mProductId,
             mProductDetails.title,
             mProductDetails.price,
