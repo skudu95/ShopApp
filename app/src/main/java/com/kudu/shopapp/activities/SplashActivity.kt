@@ -9,6 +9,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.kudu.shopapp.databinding.ActivitySplashBinding
+import com.kudu.shopapp.firestore.Firestore
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
@@ -34,13 +35,19 @@ class SplashActivity : AppCompatActivity() {
         @Suppress("DEPRECATION")
         Handler().postDelayed(
             {
-                // launch main activity
-                startActivity(Intent(this, DashboardActivity::class.java))
+                val currentUserID = Firestore().getCurrentUserId()
+
+                if (currentUserID.isNotEmpty()) {
+                    // Launch dashboard screen.
+                    startActivity(Intent(this@SplashActivity, DashboardActivity::class.java))
+                } else {
+                    // Launch the Login Activity
+                    startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                }
                 finish()
             },
             2500
         )
-
 
 
     }

@@ -13,6 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShopApp">
         <activity
+            android:name=".activities.SoldProductDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ShopApp.NoActionBar"/>
+        <activity
             android:name=".activities.MyOrderDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait"

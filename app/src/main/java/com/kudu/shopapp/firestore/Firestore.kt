@@ -365,6 +365,7 @@ class Firestore {
             .whereEqualTo(Constants.USER_ID, getCurrentUserId())
             .get()
             .addOnSuccessListener { document ->
+                Log.e(fragment.javaClass.simpleName, document.documents.toString())
                 val list: ArrayList<SoldProduct> = ArrayList()
                 for (i in document.documents) {
                     val soldProduct = i.toObject(SoldProduct::class.java)!!
