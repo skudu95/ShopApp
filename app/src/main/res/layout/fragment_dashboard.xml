@@ -11,11 +11,12 @@
         android:id="@+id/rv_dashboard_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:paddingBottom="55dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+<!--    bottom padding added later due to the price tags not showing over -->
 
     <TextView
         android:id="@+id/tv_no_dashboard_items_found"
