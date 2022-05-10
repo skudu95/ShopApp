@@ -10,20 +10,19 @@
         android:id="@+id/toolbar_register_activity"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/app_gradient_color_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/toolbar_background">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.kudu.shopapp.util.CustomTextViewBold
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginEnd="?android:attr/actionBarSize"
             android:gravity="center"
-            android:paddingStart="@dimen/toolbar_title_paddingStart"
-            android:paddingEnd="0dp"
             android:text="@string/create_an_account"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="@color/white"
             android:textSize="@dimen/toolbar_title_text_size" />
 
     </androidx.appcompat.widget.Toolbar>

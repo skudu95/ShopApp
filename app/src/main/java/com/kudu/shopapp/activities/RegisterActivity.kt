@@ -23,6 +23,8 @@ class RegisterActivity : BaseActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setUpActionBar()
+
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
@@ -32,8 +34,6 @@ class RegisterActivity : BaseActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
-
-        setUpActionBar()
 
         binding.tvLogin.setOnClickListener {
 //            startActivity(Intent(this, LoginActivity::class.java))
@@ -135,8 +135,8 @@ class RegisterActivity : BaseActivity() {
                         Firestore().registerUser(this@RegisterActivity, user)
 
                         //signs out the user and redirects to Login Activity
-                      /*  FirebaseAuth.getInstance().signOut()
-                        finish()*/
+                        /*  FirebaseAuth.getInstance().signOut()
+                          finish()*/
 
                     } else {
                         hideProgressDialog()
